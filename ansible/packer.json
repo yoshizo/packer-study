@@ -1,0 +1,27 @@
+{
+  "builders":[{
+    "type": "docker",
+    "image": "ubuntu:14.04",
+    "export_path": "image.tar"
+  }],
+  "provisioners":[
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/install-ansible.sh"
+      ],
+      "environment_vars": [
+        "ANSIBLE_VERSION=2.1.1.0-1"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "docker-import",
+      "repository": "yoshizo/ansible",
+      "tag": "0.0.1"
+    },
+    "docker-push"
+  ]
+}
+
