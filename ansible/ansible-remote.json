@@ -1,0 +1,19 @@
+{
+  "builders":[{
+    "type": "docker",
+    "image": "ubuntu:14.04",
+    "export_path": "image.tar"
+  }],
+  "provisioners" : [{
+    "type" : "ansible",
+    "playbook_file" : "httpd.yml"
+  }],
+  "post-processors": [
+    {
+      "type": "docker-import",
+      "repository": "yoshizo/ansible",
+      "tag": "0.0.1"
+    }
+  ]
+}
+

@@ -1,3 +1,5 @@
 *.iso
+*.ova
+*.retry
 packer_chache/
 target/

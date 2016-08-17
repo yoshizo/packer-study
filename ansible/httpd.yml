@@ -1,0 +1,5 @@
+# cat packer.yml
+- hosts: all
+  become: root
+  tasks:
+    - apt: name=apache2 state=installed

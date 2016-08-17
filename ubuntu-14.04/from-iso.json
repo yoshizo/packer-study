@@ -1,8 +1,15 @@
 {
+  "variables": {
+    "version":  "0.0.1",
+    "box_organization": "yoshizo",
+    "box_name": "ubuntu-14.04",
+    "access_key_id": "{{ env `AWS_ACCESS_KEY_ID` }}",
+    "secret_key": "{{ env `AWS_SECRET_ACCESS_KEY` }}"
+  },
   "builders": [
     {
       "type": "virtualbox-iso",
-      "vm_name": "ubuntu-14-04",
+      "vm_name": "{{ user `box_name` }}",
       "boot_wait": "10s",
       "disk_size": 4096,
       "guest_os_type": "Ubuntu_64",
@@ -25,7 +32,7 @@
         ]
       ],
       "http_directory": "http",
-      "headless": false,
+      "headless": true,
       "boot_command": [
         "<esc><wait>",
         "<esc><wait>",
@@ -70,7 +77,18 @@
   "post-processors": [
     {
       "type": "vagrant",
-      "output": "target/ubuntu-14-04-x64-virtualbox.box"
+      "output": "target/{{ user `box_name` }}.box"
+    },
+    {
+      "type":     "vagrant-s3",
+      "region": "ap-northeast-1",
+      "bucket":   "ysz-vagrant-box",
+      "manifest": "vagrant/json/{{ user `box_organization` }}/{{ user `box_name` }}.json",
+      "box_dir":  "vagrant/boxes/{{ user `box_organization` }}/{{ user `box_name` }}",
+      "box_name": "{{ user `box_organization` }}{{ user `box_name` }}",
+      "version":  "{{ user `version` }}",
+      "access_key_id": "{{ user `access_key_id` }}",
+      "secret_key": "{{ user `secret_key` }}"
     }
   ]
 }

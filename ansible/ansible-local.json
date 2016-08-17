@@ -13,6 +13,10 @@
       "environment_vars": [
         "ANSIBLE_VERSION=2.1.1.0-1"
       ]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "httpd.yml"
     }
   ],
   "post-processors": [
@@ -20,8 +24,7 @@
       "type": "docker-import",
       "repository": "yoshizo/ansible",
       "tag": "0.0.1"
-    },
-    "docker-push"
+    }
   ]
 }
 

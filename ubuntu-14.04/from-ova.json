@@ -1,0 +1,46 @@
+{
+  "builders": [
+    {
+      "type": "virtualbox-ovf",
+      "vm_name": "ubuntu-14-04",
+      "boot_wait": "10s",
+      "format": "ova",
+      "source_path": "ubuntu-14.04-server-cloudimg-amd64.ova",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo '/sbin/shutdown -P now' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "virtualbox_version_file": ".vbox_version",
+      "vboxmanage": [
+        [
+          "modifyvm", "{{.Name}}", "--memory", "2048"
+        ],
+        [
+          "modifyvm", "{{.Name}}", "--cpus", "2"
+        ]
+      ],
+      "http_directory": "http",
+      "headless": true
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/base.sh",
+        "scripts/vagrant.sh",
+        "scripts/virtualbox.sh",
+        "scripts/cleanup.sh"
+      ],
+      "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "target/ubuntu-14-04-x64-virtualbox.box"
+    }
+  ]
+}
