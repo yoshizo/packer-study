@@ -3,3 +3,4 @@
 *.retry
 packer_chache/
 target/
+output-virtualbox-iso/

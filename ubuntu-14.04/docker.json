@@ -1,0 +1,30 @@
+{
+  "builders":[{
+    "type": "docker",
+    "image": "ubuntu:14.04",
+    "export_path": "image.tar"
+  }],
+  "provisioners":[
+    {
+      "type": "shell",
+      "inline": [
+        "apt-get -y update",
+        "apt-get install -y python-pip python-dev",
+        "pip install ansible"
+      ]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "ansible/playbook.yml",
+      "role_paths": ["ansible/roles/python", "ansible/roles/ruby"],
+      "staging_directory": "/tmp/packer-provisioner-ansible-local"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "docker-import",
+      "repository": "hexa/ubuntu/base",
+      "tag": "0.1"
+    }
+  ]
+}
