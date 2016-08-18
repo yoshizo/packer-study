@@ -1,6 +1,7 @@
 *.iso
 *.ova
 *.retry
+.vagrant/
 packer_chache/
 target/
 output-virtualbox-iso/
