@@ -1,0 +1,32 @@
+{
+  "variables": {
+    "image_group": "yoshizo",
+    "image_name": "{{ env `IMAGE_NAME` }}",
+    "image_tag": "{{ env `IMAGE_TAG` }}",
+    "playbook_file": "{{ env `PLAYBOOK_FILE` }}"
+  },
+  "builders":[{
+    "type": "docker",
+    "image": "ubuntu:14.04",
+    "export_path": "image.tar"
+  }],
+  "provisioners":[
+    {
+      "type": "shell",
+      "script": "./files/ansible.sh"
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "{{ user `playbook_file` }}",
+      "role_paths": ["ansible/roles/{{ user `image_name` }}"],
+      "staging_directory": "/tmp/packer-provisioner-ansible-local"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "docker-import",
+      "repository": "{{ user `image_group` }}/{{ user `image_name` }}",
+      "tag": "{{ user `image_tag` }}"
+    }
+  ]
+}
