@@ -1,15 +1,11 @@
 FROM ubuntu:14.04
 
 # Ansible container
-ENV HOSTNAME ansible
 ENV ANSIBLE_VERSION 2.1.1.0-1
-WORKDIR /tmp
+
+ADD ./files/ansible.sh /tmp/ansible.sh
 RUN \
-  apt-get update && \
-  apt-get install -y curl unzip software-properties-common && \
-  apt-add-repository -y ppa:ansible/ansible && \
-  apt-get update && \
-  apt-get install -y ansible=${ANSIBLE_VERSION}ppa~trusty && \
-  rm -rf /var/lib/apt/lists/*
+  bash /tmp/ansible.sh && \
+  rm -rf /var/lib/apt/lists/* /tmp/ansible.sh
 
 CMD ["bash"]
