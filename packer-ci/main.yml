@@ -1,0 +1,48 @@
+- hosts: localhost
+  vars:
+    packer_version: 0.10.1
+    password: vagrant
+
+  tasks:
+  - name: ensure to install utilities
+    apt: name={{ item }} state=installed
+    become: yes
+    with_items:
+      - curl
+      - unzip
+
+  - name: get packer archive
+    get_url: url=https://releases.hashicorp.com/packer/{{ packer_version }}/packer_{{ packer_version }}_linux_amd64.zip dest=/tmp/packer_{{ packer_version }}.zip
+    notify: install packer
+
+  - name: ensure packer plugin directory
+    file: path=~/.packer.d/plugins state=directory
+
+  - name: get status of packer-post-processor-vagrant-s3 plugin
+    stat: path=~/.packer.d/plugins/packer-post-processor-vagrant-s3
+    register: packer_plugin
+
+  - name: install packer plugin
+    script: ./files/packer-plugins.sh
+    when: not packer_plugin.stat.exists
+
+  - name: ensure to install virtualbox
+    become: yes
+    environment:
+      VIRTUAL_BOX_VERSION: 5.0.26-108824
+    script: ./files/virtualbox.sh
+
+  - name: ensure to install vagrant
+    become: yes
+    environment:
+      VAGRANT_VERSION: 1.8.5
+    script: ./files/vagrant.sh
+
+  handlers:
+  - name: install packer
+    become: yes
+    unarchive: src=/tmp/packer_{{ packer_version }}.zip dest=/usr/local/bin/
+    notify: remove packer archive
+
+  - name: remove packer archive
+    file: path=/tmp/packer_{{ packer_version }}.zip state=absent

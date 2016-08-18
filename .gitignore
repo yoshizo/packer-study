@@ -1,5 +1,6 @@
 *.iso
 *.ova
 *.retry
+private.yml
 packer_chache/
 target/
