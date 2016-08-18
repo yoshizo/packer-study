@@ -2,5 +2,8 @@
 *.ova
 *.retry
 private.yml
+
+.vagrant/
 packer_chache/
 target/
+output-virtualbox-iso/

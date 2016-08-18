@@ -15,7 +15,7 @@
       "guest_os_type": "Ubuntu_64",
       "iso_checksum": "dd54dc8cfc2a655053d19813c2f9aa9f",
       "iso_checksum_type": "md5",
-      "iso_url": "http://releases.ubuntu.com/14.04.5/ubuntu-14.04.5-server-amd64.iso",
+      "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.5-server-amd64.iso",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -75,20 +75,22 @@
     }
   ],
   "post-processors": [
-    {
-      "type": "vagrant",
-      "output": "target/{{ user `box_name` }}.box"
-    },
-    {
-      "type":     "vagrant-s3",
-      "region": "ap-northeast-1",
-      "bucket":   "ysz-vagrant-box",
-      "manifest": "vagrant/json/{{ user `box_organization` }}/{{ user `box_name` }}.json",
-      "box_dir":  "vagrant/boxes/{{ user `box_organization` }}/{{ user `box_name` }}",
-      "box_name": "{{ user `box_organization` }}{{ user `box_name` }}",
-      "version":  "{{ user `version` }}",
-      "access_key_id": "{{ user `access_key_id` }}",
-      "secret_key": "{{ user `secret_key` }}"
-    }
+    [
+      {
+        "type": "vagrant",
+        "output": "target/{{ user `box_name` }}.box"
+      },
+      {
+        "type":     "vagrant-s3",
+        "region": "ap-northeast-1",
+        "bucket":   "ysz-vagrant-box",
+        "manifest": "vagrant/json/{{ user `box_organization` }}/{{ user `box_name` }}.json",
+        "box_dir":  "vagrant/boxes/{{ user `box_organization` }}/{{ user `box_name` }}",
+        "box_name": "{{ user `box_organization` }}{{ user `box_name` }}",
+        "version":  "{{ user `version` }}",
+        "access_key_id": "{{ user `access_key_id` }}",
+        "secret_key": "{{ user `secret_key` }}"
+      }
+    ]
   ]
 }
